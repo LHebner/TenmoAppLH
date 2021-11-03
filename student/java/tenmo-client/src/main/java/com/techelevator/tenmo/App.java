@@ -5,8 +5,11 @@ import com.techelevator.tenmo.model.User;
 import com.techelevator.tenmo.model.UserCredentials;
 import com.techelevator.tenmo.services.AuthenticationService;
 import com.techelevator.tenmo.services.AuthenticationServiceException;
-import com.techelevator.tenmo.services.UserService;
+import com.techelevator.tenmo.services.AccountService;
 import com.techelevator.view.ConsoleService;
+
+import java.util.List;
+
 
 public class App {
 
@@ -27,18 +30,18 @@ private static final String API_BASE_URL = "http://localhost:8080/";
     private AuthenticatedUser currentUser;
     private ConsoleService console;
     private AuthenticationService authenticationService;
-    private UserService userService;
+    private AccountService accountService;
 
     public static void main(String[] args) {
     	App app = new App(new ConsoleService(System.in, System.out), new AuthenticationService(API_BASE_URL),
-		new UserService(API_BASE_URL + "user/"));
+		new AccountService(API_BASE_URL));
     	app.run();
     }
 
-    public App(ConsoleService console, AuthenticationService authenticationService, UserService userService) {
+    public App(ConsoleService console, AuthenticationService authenticationService, AccountService accountService) {
 		this.console = console;
 		this.authenticationService = authenticationService;
-		this.userService = userService;
+		this.accountService = accountService;
 	}
 
 	public void run() {
@@ -74,8 +77,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 
 	private void viewCurrentBalance() {
 		// TODO Auto-generated method stub
-		System.out.println("Your current account balance is: " + userService.getBalance(
-				currentUser));
+		System.out.println("Your current account balance is: " + accountService.getBalance(currentUser.getToken()));
 	}
 
 	private void viewTransferHistory() {
@@ -90,7 +92,16 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 
 	private void sendBucks() {
 		// TODO Auto-generated method stub
-		
+		List<User> userList = accountService.getUserList(currentUser.getToken());
+		System.out.println("-------------------------------------------");
+		System.out.println("Users");
+		System.out.println("ID              Name");
+		System.out.println("--------------------------------------------");
+//		while (!userList.isEmpty()) {
+//			System.out.println(userList.get());
+//		}
+		System.out.println(userList);
+		System.out.println("--------------------------------------------");
 	}
 
 	private void requestBucks() {

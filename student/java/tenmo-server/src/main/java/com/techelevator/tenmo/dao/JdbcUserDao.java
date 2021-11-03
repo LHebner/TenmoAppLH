@@ -80,16 +80,18 @@ public class JdbcUserDao implements UserDao {
     }
 
     @Override
-    public BigDecimal getBalance(User user, long userId) {
-        user = new User();
-        String sql = "SELECT balance FROM accounts WHERE user_id = ?;";
-        BigDecimal balance = jdbcTemplate.queryForObject(sql, BigDecimal.class, userId);
-        if (user.getId() != 0) {
-            return balance;
-        } else {
-            return null;
-        }
+    public List<User> findAllUsers() {
+        List<User> users = new ArrayList<>();
+        String sql = "SELECT user_id, username, password_hash FROM users;";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
+//        while(results.next()) {
+//            Long userId = mapRowToUser(results).getId();
+//            String username = mapRowToUser(results).getUsername();
+//            users.add();
+//        }
+        return users;
     }
+
 
     private User mapRowToUser(SqlRowSet rs) {
         User user = new User();

@@ -12,16 +12,14 @@ public class User {
    private String password;
    private boolean activated;
    private Set<Authority> authorities = new HashSet<>();
-   private BigDecimal balance;
 
    public User() { }
 
-   public User(Long id, String username, String password, String authorities, BigDecimal balance) {
+   public User(Long id, String username, String password, String authorities) {
       this.id = id;
       this.username = username;
       this.password = password;
       this.activated = true;
-      this.balance = balance;
    }
 
    public Long getId() {
@@ -64,13 +62,6 @@ public class User {
       this.authorities = authorities;
    }
 
-   public BigDecimal getBalance() {
-      return balance;
-   }
-
-   public void setBalance(BigDecimal balance) {
-      this.balance = balance;
-   }
 
    public void setAuthorities(String authorities) {
       String[] roles = authorities.split(",");
