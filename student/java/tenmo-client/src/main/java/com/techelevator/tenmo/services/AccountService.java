@@ -10,6 +10,7 @@ import org.springframework.web.client.RestTemplate;
 import java.math.BigDecimal;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class AccountService {
@@ -38,9 +39,9 @@ public class AccountService {
 
     public List<User> getUserList(String authToken) {
         HttpEntity<?> entity = new HttpEntity<>(headers(authToken));
-        ResponseEntity<List> userList = restTemplate.exchange(API_BASE_URL + "account/transfer",
-                HttpMethod.GET, entity, List.class);
-        return userList.getBody();
+        ResponseEntity <User[]> userList = restTemplate.exchange(API_BASE_URL + "user/all",
+                HttpMethod.GET, entity, User[].class);
+        return Arrays.asList(userList.getBody());
 
     }
 

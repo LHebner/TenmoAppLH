@@ -8,7 +8,10 @@ import com.techelevator.tenmo.services.AuthenticationServiceException;
 import com.techelevator.tenmo.services.AccountService;
 import com.techelevator.view.ConsoleService;
 
+import java.io.PrintWriter;
+import java.security.Principal;
 import java.util.List;
+import java.util.Scanner;
 
 
 public class App {
@@ -31,6 +34,8 @@ private static final String API_BASE_URL = "http://localhost:8080/";
     private ConsoleService console;
     private AuthenticationService authenticationService;
     private AccountService accountService;
+	private PrintWriter out;
+	private Scanner in;
 
     public static void main(String[] args) {
     	App app = new App(new ConsoleService(System.in, System.out), new AuthenticationService(API_BASE_URL),
@@ -96,12 +101,16 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 		System.out.println("-------------------------------------------");
 		System.out.println("Users");
 		System.out.println("ID              Name");
-		System.out.println("--------------------------------------------");
-//		while (!userList.isEmpty()) {
-//			System.out.println(userList.get());
-//		}
-		System.out.println(userList);
-		System.out.println("--------------------------------------------");
+		System.out.println("-------------------------------------------");
+		for (int i = 0; i < userList.size(); i++) {
+			System.out.println(userList.get(i).getUserId() + "            " +
+					userList.get(i).getUserName());
+		}
+		System.out.println("-------------------------------------------");
+		System.out.println();
+		//System.out.println("Enter ID of user you are sending to (0 to cancel): ");
+		console.getUserInputInteger("Enter ID of user you are sending to (0 to cancel)");
+		console.getUserInputInteger("Enter amount");
 	}
 
 	private void requestBucks() {
@@ -168,4 +177,24 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 		String password = console.getUserInput("Password");
 		return new UserCredentials(username, password);
 	}
+
+//	private Integer getUserInputId(String prompt) {
+//		int id;
+//		Integer result = null;
+//		do {
+//			out.print(prompt+": ");
+//			out.flush();
+//			String userInput = in.nextLine();
+//			if (accountService.getUserList().contains(userInput))
+//				try {
+//					result = Integer.parseInt(userInput);
+//					id = result;
+//				} catch(NumberFormatException e) {
+//					out.println(System.lineSeparator() + "*** " + userInput + " is not valid ***" + System.lineSeparator());
+//				}
+//		} while(result == null);
+//		return result;
+//	}
+
+
 }

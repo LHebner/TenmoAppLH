@@ -1,27 +1,25 @@
 package com.techelevator.tenmo.model;
 
-import java.math.BigDecimal;
-
 public class User {
 
-	private Integer id;
-	private String username;
+	private Integer userId;
+	private String userName;
 
 
-	public Integer getId() {
-		return id;
+	public Integer getUserId() {
+		return userId;
 	}
 	
-	public void setId(Integer id) {
-		this.id = id;
+	public void setUserId(Integer id) {
+		this.userId = id;
 	}
 
-	public String getUsername() {
-		return username;
+	public String getUserName() {
+		return userName;
 	}
 	
-	public void setUsername(String username) {
-		this.username = username;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 }
