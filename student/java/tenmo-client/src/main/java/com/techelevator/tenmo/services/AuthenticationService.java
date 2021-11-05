@@ -42,7 +42,8 @@ public class AuthenticationService {
 
 	private AuthenticatedUser sendLoginRequest(HttpEntity<UserCredentials> entity) throws AuthenticationServiceException {
 		try {	
-			ResponseEntity<AuthenticatedUser> response = restTemplate.exchange(baseUrl + "login", HttpMethod.POST, entity, AuthenticatedUser.class);
+			ResponseEntity<AuthenticatedUser> response = restTemplate.exchange(baseUrl + "login",
+					HttpMethod.POST, entity, AuthenticatedUser.class);
 			return response.getBody(); 
 		} catch(RestClientResponseException ex) {
 			String message = createLoginExceptionMessage(ex);

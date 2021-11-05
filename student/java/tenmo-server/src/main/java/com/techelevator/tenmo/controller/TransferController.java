@@ -6,6 +6,7 @@ import com.techelevator.tenmo.dao.TransferDao;
 import com.techelevator.tenmo.dao.UserDao;
 import com.techelevator.tenmo.model.Account;
 import com.techelevator.tenmo.model.Transfer;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,9 +28,8 @@ public class TransferController {
         this.transferDao = transferDao;
     }
 
-        @RequestMapping(path = "", method = RequestMethod.POST)
-    public boolean transferFrom(Transfer transfer) {
-
-
+    @RequestMapping(path = "", method = RequestMethod.POST)
+    public void transfer(@RequestBody Transfer transfer) {
+        transferDao.transfer(transfer.getAccountFrom(), transfer.getAccountTo(), transfer.getAmount());
     }
 }

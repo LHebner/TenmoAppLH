@@ -32,11 +32,11 @@ public class AccountController {
         return accountDao.getAccountById(userId).getBalance();
     }
 
-    @PreAuthorize("isAuthenticated()")
-    @RequestMapping(value = "transfer", method = RequestMethod.GET)
-    public List<User> getUserList() {
-        List<User> userList = userDao.findAllUsers();
-        return userList;
-    }
+//    @PreAuthorize("isAuthenticated()")
+//    @RequestMapping(value = "transfer", method = RequestMethod.GET)
+//    public List<User> getUserList() {
+//        List<User> userList = userDao.findAllUsers();
+//        return userList;
+//    }
 
 }

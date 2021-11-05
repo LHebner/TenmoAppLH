@@ -23,8 +23,8 @@ public class TransferService {
         return headers;
     }
 
-    public boolean transferFrom(String authToken) {
-        HttpEntity<?> entity = new HttpEntity<>(headers(authToken));
+    public boolean transfer(Transfer transfer) {
+        HttpEntity<Transfer> entity = makeTransferEntity((transfer));
         ResponseEntity<Boolean> response = restTemplate.exchange(API_BASE_URL + "transfer/",
                 HttpMethod.POST, entity, Boolean.class);
         return response.getBody();

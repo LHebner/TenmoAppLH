@@ -1,15 +1,17 @@
 package com.techelevator.tenmo;
 
 import com.techelevator.tenmo.model.AuthenticatedUser;
+import com.techelevator.tenmo.model.Transfer;
 import com.techelevator.tenmo.model.User;
 import com.techelevator.tenmo.model.UserCredentials;
 import com.techelevator.tenmo.services.AuthenticationService;
 import com.techelevator.tenmo.services.AuthenticationServiceException;
 import com.techelevator.tenmo.services.AccountService;
+import com.techelevator.tenmo.services.TransferService;
 import com.techelevator.view.ConsoleService;
 
 import java.io.PrintWriter;
-import java.security.Principal;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Scanner;
 
@@ -34,6 +36,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
     private ConsoleService console;
     private AuthenticationService authenticationService;
     private AccountService accountService;
+    private TransferService transferService;
 	private PrintWriter out;
 	private Scanner in;
 
@@ -108,9 +111,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 		}
 		System.out.println("-------------------------------------------");
 		System.out.println();
-		//System.out.println("Enter ID of user you are sending to (0 to cancel): ");
-		console.getUserInputInteger("Enter ID of user you are sending to (0 to cancel)");
-		console.getUserInputInteger("Enter amount");
+		collectTransferDetails();
 	}
 
 	private void requestBucks() {
@@ -178,23 +179,11 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 		return new UserCredentials(username, password);
 	}
 
-//	private Integer getUserInputId(String prompt) {
-//		int id;
-//		Integer result = null;
-//		do {
-//			out.print(prompt+": ");
-//			out.flush();
-//			String userInput = in.nextLine();
-//			if (accountService.getUserList().contains(userInput))
-//				try {
-//					result = Integer.parseInt(userInput);
-//					id = result;
-//				} catch(NumberFormatException e) {
-//					out.println(System.lineSeparator() + "*** " + userInput + " is not valid ***" + System.lineSeparator());
-//				}
-//		} while(result == null);
-//		return result;
-//	}
-
+	private Transfer collectTransferDetails() {
+		int toId = console.getUserInputInteger("Enter ID of user you are sending to (0 to cancel)");
+		BigDecimal transferAmount = console.getUserInputAmount("Enter amount");
+		Integer fromId = currentUser.getUser().getUserId();
+		return new Transfer(2, 2, fromId + 1000, toId + 1000, transferAmount);
+	}
 
 }

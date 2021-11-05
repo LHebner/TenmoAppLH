@@ -1,8 +1,12 @@
 package com.techelevator.tenmo.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class UserDto {
 
+    @JsonProperty("id")
     private long userId;
+    @JsonProperty("username")
     private String userName;
 
     public UserDto() {}

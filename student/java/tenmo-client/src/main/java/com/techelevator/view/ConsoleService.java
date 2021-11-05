@@ -4,6 +4,7 @@ package com.techelevator.view;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
 import java.util.Scanner;
 
 public class ConsoleService {
@@ -74,20 +75,21 @@ public class ConsoleService {
 		return result;
 	}
 
-//	public Integer getUserInputId(String prompt) {
-//		Integer result = null;
-//		do {
-//			out.print(prompt+": ");
-//			out.flush();
-//			String userInput = in.nextLine();
-//			if (userInput = )
-//				try {
-//					result = Integer.parseInt(userInput);
-//				} catch(NumberFormatException e) {
-//					out.println(System.lineSeparator() + "*** " + userInput + " is not valid ***" + System.lineSeparator());
-//				}
-//		} while(result == null);
-//		return result;
-//	}
+	public BigDecimal getUserInputAmount(String prompt) {
+		Double input = null;
+		BigDecimal result = null;
+		do {
+			out.print(prompt+": ");
+			out.flush();
+			String userInput = in.nextLine();
+				try {
+					input = Double.parseDouble(userInput);
+					result = BigDecimal.valueOf(input);
+				} catch(NumberFormatException e) {
+					out.println(System.lineSeparator() + "*** " + userInput + " is not valid ***" + System.lineSeparator());
+				}
+		} while(input == null);
+		return result;
+	}
 
 }
