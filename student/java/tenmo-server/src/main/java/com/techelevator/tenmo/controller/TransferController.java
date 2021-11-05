@@ -6,13 +6,12 @@ import com.techelevator.tenmo.dao.TransferDao;
 import com.techelevator.tenmo.dao.UserDao;
 import com.techelevator.tenmo.model.Account;
 import com.techelevator.tenmo.model.Transfer;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/transfer/")
@@ -30,6 +29,13 @@ public class TransferController {
 
     @RequestMapping(path = "", method = RequestMethod.POST)
     public void transfer(@RequestBody Transfer transfer) {
-        transferDao.transfer(transfer.getAccountFrom(), transfer.getAccountTo(), transfer.getAmount());
+        transferDao.transfer(transfer.getTransferTypeId(), transfer.getTransferStatusId(), transfer.getAccountFrom(), transfer.getAccountTo(), transfer.getAmount());
+    }
+
+    @RequestMapping(path = "all", method = RequestMethod.GET)
+    public List<Transfer> getTransferList(Account account) {
+        List<Transfer> transferList = new ArrayList<>();
+        transferList = transferDao.getTransfers(account.getAccountId());
+        return transferList;
     }
 }

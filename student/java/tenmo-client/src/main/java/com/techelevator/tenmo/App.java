@@ -42,14 +42,15 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 
     public static void main(String[] args) {
     	App app = new App(new ConsoleService(System.in, System.out), new AuthenticationService(API_BASE_URL),
-		new AccountService(API_BASE_URL));
+		new AccountService(API_BASE_URL), new TransferService(API_BASE_URL));
     	app.run();
     }
 
-    public App(ConsoleService console, AuthenticationService authenticationService, AccountService accountService) {
+    public App(ConsoleService console, AuthenticationService authenticationService, AccountService accountService, TransferService transferService) {
 		this.console = console;
 		this.authenticationService = authenticationService;
 		this.accountService = accountService;
+		this.transferService = transferService;
 	}
 
 	public void run() {
@@ -90,6 +91,26 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 
 	private void viewTransferHistory() {
 		// TODO Auto-generated method stub
+		List<Transfer> transferList = transferService.getTransferList(currentUser.getToken());
+		List<User> userList = accountService.getUserList(currentUser.getToken());
+		System.out.println("----------------------------------");
+		System.out.println("Transfers");
+		System.out.println("ID          From/To           Amount");
+		System.out.println("----------------------------------");
+		for (int i = 0; i < transferList.size(); i++) {
+			if (transferList.get(i).getAccountFrom() == (currentUser.getUser().getUserId()+1000)) {
+				int userTo = transferList.get(i).getAccountTo() + 1000;
+				System.out.println(transferList.get(i).getTransferId() + "          To: " +
+						userList.get(userTo).getUserName() + "         $" + transferList.get(i).getAmount());
+			}
+			if (transferList.get(i).getAccountTo() == (currentUser.getUser().getUserId()+1000)) {
+				int userFrom = transferList.get(i).getAccountTo() + 1000;
+				System.out.println(transferList.get(i).getTransferId() + "        From: " +
+						userList.get(userFrom).getUserName() + "         $" + transferList.get(i).getAmount());
+			}
+		}
+		System.out.println("-----------------------------------");
+		System.out.println("Please enter transfer ID to view details");
 		
 	}
 
@@ -112,6 +133,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 		System.out.println("-------------------------------------------");
 		System.out.println();
 		collectTransferDetails();
+		//transferService.transfer()
 	}
 
 	private void requestBucks() {
@@ -179,11 +201,13 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 		return new UserCredentials(username, password);
 	}
 
-	private Transfer collectTransferDetails() {
+	private void collectTransferDetails() {
+
 		int toId = console.getUserInputInteger("Enter ID of user you are sending to (0 to cancel)");
 		BigDecimal transferAmount = console.getUserInputAmount("Enter amount");
 		Integer fromId = currentUser.getUser().getUserId();
-		return new Transfer(2, 2, fromId + 1000, toId + 1000, transferAmount);
+		Transfer newTransfer = new Transfer(2, 2, fromId + 1000, toId + 1000, transferAmount);
+		transferService.transfer(newTransfer);
 	}
 
 }
