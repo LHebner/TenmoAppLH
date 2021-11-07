@@ -2,15 +2,12 @@ package com.techelevator.tenmo.dao;
 
 import com.techelevator.tenmo.model.Account;
 import com.techelevator.tenmo.model.Transfer;
-import com.techelevator.tenmo.model.User;
 import org.springframework.dao.DataAccessException;
-import org.springframework.data.jdbc.core.JdbcAggregateOperations;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,16 +78,18 @@ public class JdbcTransferDao implements TransferDao {
         return transfers;
     }
 
-//    @Override
-//    public boolean createTransfer(int transferTypeId, int transferStatusId, int accountFrom,
-//                                  int accountTo, BigDecimal amount) {
-//        String sql = "INSERT INTO transfers (transfer_type_id, transfer_status_id, account_from, " +
-//                "account_to, amount) " + "VALUES (2, 2, ?, ?, ?);";
-//        Integer newTransferId;
-//        newTransferId = jdbcTemplate.queryForObject(sql, Integer.class, accountFrom, accountTo, amount);
-//
-//        return true;
-//    }
+    @Override
+    public boolean createTransfer(int transferTypeId, int transferStatusId, int accountFrom,
+                                  int accountTo, BigDecimal amount) {
+        String sql = "INSERT INTO transfers (transfer_type_id, transfer_status_id, account_from, " +
+                "account_to, amount) " + "VALUES (2, 2, ?, ?, ?) RETURNING transfer_id;";
+        try {
+            int newTransferId = jdbcTemplate.queryForObject(sql, Integer.class, accountFrom, accountTo, amount);
+        } catch (DataAccessException e) {
+            return false;
+        }
+        return true;
+    }
 
     private Transfer mapRowToTransfer(SqlRowSet rs) {
         Transfer transfer = new Transfer();

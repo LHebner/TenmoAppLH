@@ -8,8 +8,6 @@ import com.techelevator.tenmo.model.Account;
 import com.techelevator.tenmo.model.Transfer;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +27,7 @@ public class TransferController {
 
     @RequestMapping(path = "", method = RequestMethod.POST)
     public void transfer(@RequestBody Transfer transfer) {
-        transferDao.transfer(transfer.getTransferTypeId(), transfer.getTransferStatusId(), transfer.getAccountFrom(), transfer.getAccountTo(), transfer.getAmount());
+        transferDao.createTransfer(transfer.getTransferTypeId(), transfer.getTransferStatusId(), transfer.getAccountFrom(), transfer.getAccountTo(), transfer.getAmount());
     }
 
     @RequestMapping(path = "all", method = RequestMethod.GET)

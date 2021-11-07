@@ -93,10 +93,10 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 		// TODO Auto-generated method stub
 		List<Transfer> transferList = transferService.getTransferList(currentUser.getToken());
 		List<User> userList = accountService.getUserList(currentUser.getToken());
-		System.out.println("----------------------------------");
+		System.out.println("-------------------------------------------");
 		System.out.println("Transfers");
 		System.out.println("ID          From/To           Amount");
-		System.out.println("----------------------------------");
+		System.out.println("-------------------------------------------");
 		for (int i = 0; i < transferList.size(); i++) {
 			if (transferList.get(i).getAccountFrom() == (currentUser.getUser().getUserId()+1000)) {
 				int userTo = transferList.get(i).getAccountTo() + 1000;
@@ -109,9 +109,12 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 						userList.get(userFrom).getUserName() + "         $" + transferList.get(i).getAmount());
 			}
 		}
-		System.out.println("-----------------------------------");
-		System.out.println("Please enter transfer ID to view details");
-		
+		System.out.println("-------------------------------------------");
+		int input = console.getUserInputInteger("Please enter transfer ID to view details " +
+				"(0 to cancel)");
+		if (input == 0) {
+			return;
+		}
 	}
 
 	private void viewPendingRequests() {
@@ -133,7 +136,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 		System.out.println("-------------------------------------------");
 		System.out.println();
 		collectTransferDetails();
-		//transferService.transfer()
+//		transferService.transfer()
 	}
 
 	private void requestBucks() {
@@ -204,6 +207,9 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	private void collectTransferDetails() {
 
 		int toId = console.getUserInputInteger("Enter ID of user you are sending to (0 to cancel)");
+				if (toId == 0) {
+					return;
+				}
 		BigDecimal transferAmount = console.getUserInputAmount("Enter amount");
 		Integer fromId = currentUser.getUser().getUserId();
 		Transfer newTransfer = new Transfer(2, 2, fromId + 1000, toId + 1000, transferAmount);

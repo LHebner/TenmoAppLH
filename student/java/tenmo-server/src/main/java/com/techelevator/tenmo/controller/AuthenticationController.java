@@ -16,7 +16,6 @@ import com.techelevator.tenmo.model.User;
 import com.techelevator.tenmo.security.jwt.TokenProvider;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.math.BigDecimal;
 
 /**
  * Controller to authenticate users.
