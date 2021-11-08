@@ -97,7 +97,6 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 		System.out.println("-------------------------------------------");
 		System.out.println("Transfers");
 		System.out.println("ID          From/To           Amount");
-<<<<<<< HEAD
 		System.out.println("----------------------------------");
 //		for (int i = 0; i < transferList.size(); i++) {
 //			if (transferList.get(i).getAccountFrom() == (currentUser.getUser().getUserId()+1000)) {
@@ -121,13 +120,9 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 //						(transfer.getAccountFrom() - 1000) + "         $" + transfer.getAmount());
 //			}
 //		}
-=======
-		System.out.println("-------------------------------------------");
->>>>>>> 0037c7235fa70d12af53f5f9fcb6c864cbeaa1d6
 		for (int i = 0; i < transferList.size(); i++) {
 			System.out.println(transferList.get(i).toString());
 		}
-<<<<<<< HEAD
 
 		System.out.println("-----------------------------------");
 		int input = console.getUserInputInteger("Please enter transfer ID to view details (0 to cancel)");
@@ -135,14 +130,6 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 			return;
 		}
 		
-=======
-		System.out.println("-------------------------------------------");
-		int input = console.getUserInputInteger("Please enter transfer ID to view details " +
-				"(0 to cancel)");
-		if (input == 0) {
-			return;
-		}
->>>>>>> 0037c7235fa70d12af53f5f9fcb6c864cbeaa1d6
 	}
 
 	private void viewPendingRequests() {
@@ -235,15 +222,9 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	private void collectTransferDetails() {
 
 		int toId = console.getUserInputInteger("Enter ID of user you are sending to (0 to cancel)");
-<<<<<<< HEAD
 		if (toId == 0) {
 			return;
 		}
-=======
-				if (toId == 0) {
-					return;
-				}
->>>>>>> 0037c7235fa70d12af53f5f9fcb6c864cbeaa1d6
 		BigDecimal transferAmount = console.getUserInputAmount("Enter amount");
 		Integer fromId = currentUser.getUser().getUserId();
 		Transfer newTransfer = new Transfer(2, 2, fromId + 1000, toId + 1000, transferAmount);

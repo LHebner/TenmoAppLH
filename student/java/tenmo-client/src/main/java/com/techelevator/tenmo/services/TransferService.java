@@ -27,7 +27,6 @@ public class TransferService {
         return headers;
     }
 
-<<<<<<< HEAD
 //    public Transfer transfer(Transfer transfer) {
 //        HttpEntity<Transfer> entity = makeTransferEntity(transfer);
 //        Transfer newTransfer = null;
@@ -69,18 +68,6 @@ public class TransferService {
     /**
      * ORIGINAL END
      */
-=======
-    public Transfer transfer(Transfer transfer) {
-        HttpEntity<?> entity = makeTransferEntity(transfer);
-        ResponseEntity<Transfer> newTransfer = null;
-        try {
-            newTransfer = restTemplate.exchange(API_BASE_URL + "transfer/",
-                    HttpMethod.POST, entity, Transfer.class);
-        } catch (RestClientResponseException e) {}
-
-        return newTransfer.getBody();
-    }
->>>>>>> 0037c7235fa70d12af53f5f9fcb6c864cbeaa1d6
 
     public List<Transfer> getTransferList(String authToken) {
         HttpEntity<?> entity = new HttpEntity<>(headers(authToken));

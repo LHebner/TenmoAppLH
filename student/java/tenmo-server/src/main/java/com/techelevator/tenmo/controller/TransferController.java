@@ -45,8 +45,10 @@ public class TransferController {
 //    }
 
     @RequestMapping(path = "/all", method = RequestMethod.GET)
-    public List<Transfer> getTransfers(@RequestBody Account account) {
+    public List<Transfer> getTransfers(Principal principal) {
         List<Transfer> transferList = new ArrayList<>();
+        int userId = userDao.findIdByUsername(principal.getName());
+        Account account = accountDao.getAccountById(userId);
         transferList = transferDao.getTransfers(account);
         return transferList;
     }
