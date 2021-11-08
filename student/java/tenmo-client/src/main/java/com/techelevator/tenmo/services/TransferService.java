@@ -30,21 +30,47 @@ public class TransferService {
         return headers;
     }
 
-    public Transfer transfer(Transfer transfer) {
-        HttpEntity<Transfer> entity = makeTransferEntity(transfer);
-        Transfer newTransfer = null;
+//    public Transfer transfer(Transfer transfer) {
+//        HttpEntity<Transfer> entity = makeTransferEntity(transfer);
+//        Transfer newTransfer = null;
+//        try {
+//            newTransfer = restTemplate.postForObject(API_BASE_URL + "transfer/", entity, Transfer.class);
+//        } catch (RestClientResponseException e) {}
+//        return newTransfer;
+//    }
+
+    /**
+     * Add new transfer to transfer table
+     * @param newTransfer
+     * @return
+     */
+    public Transfer transfer(Transfer newTransfer) {
+        HttpEntity<Transfer> entity = makeTransferEntity(newTransfer);
+
+        Transfer addedTransfer = null;
         try {
-            newTransfer = restTemplate.postForObject(API_BASE_URL + "transfer/", entity, Transfer.class);
-        } catch (RestClientResponseException e) {}
-        return newTransfer;
+            addedTransfer = restTemplate.postForObject(API_BASE_URL + "transfer",
+                    entity, Transfer.class);
+        } catch (RestClientResponseException e) {
+            e.getRawStatusCode();
+        }
+        return addedTransfer;
     }
 
+    /**
+     * ORIGINAL START
+     * @param transfer
+     * @return
+     */
 //    public Boolean transfer(Transfer transfer) {
 //        HttpEntity<Transfer> entity = makeTransferEntity(transfer);
 //        ResponseEntity<Boolean> response = restTemplate.exchange(API_BASE_URL + "transfer/",
-//                HttpMethod.PUT, entity, Boolean.class);
+//                HttpMethod.POST, entity, Boolean.class);
 //        return response.getBody();
 //    }
+    /**
+     * ORIGINAL END
+     */
 
     public List<Transfer> getTransferList(String authToken) {
         HttpEntity<?> entity = new HttpEntity<>(headers(authToken));

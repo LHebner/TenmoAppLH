@@ -11,7 +11,9 @@ public interface TransferDao {
 
     boolean transfer(int transferTypeId, int transferStatusId, int accountFrom, int accountTo, BigDecimal amount);
 
-    List<Transfer> getTransfers(int accountId);
+    void accountTransfer(Transfer transfer);
+
+    List<Transfer> getTransfers(Account account);
 
 //    boolean createTransfer(int transferTypeId, int transferStatusId, int accountFrom, int accountTo, BigDecimal amount);
 }

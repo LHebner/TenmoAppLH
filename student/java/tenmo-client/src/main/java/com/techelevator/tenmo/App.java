@@ -12,6 +12,7 @@ import com.techelevator.view.ConsoleService;
 
 import java.io.PrintWriter;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -97,20 +98,37 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 		System.out.println("Transfers");
 		System.out.println("ID          From/To           Amount");
 		System.out.println("----------------------------------");
+//		for (int i = 0; i < transferList.size(); i++) {
+//			if (transferList.get(i).getAccountFrom() == (currentUser.getUser().getUserId()+1000)) {
+//				int userTo = transferList.get(i).getAccountTo() - 1000;
+//				System.out.println(transferList.get(i).getTransferId() + "          To: " +
+//						userList.get(userTo).getUserName() + "         $" + transferList.get(i).getAmount());
+//			}
+//			if (transferList.get(i).getAccountTo() == (currentUser.getUser().getUserId()+1000)) {
+//				int userFrom = transferList.get(i).getAccountTo() - 1000;
+//				System.out.println(transferList.get(i).getTransferId() + "        From: " +
+//						userList.get(userFrom).getUserName() + "         $" + transferList.get(i).getAmount());
+//			}
+//		}
+//		for (Transfer transfer : transferList) {
+//			if (transfer.getAccountTo() == (currentUser.getUser().getUserId() + 1000)) {
+//				System.out.println(transfer.getTransferId() + "          To: " +
+//						currentUser.getUser().getUserName() + "         $" + transfer.getAmount());
+//			}
+//			if (transfer.getAccountFrom() == (currentUser.getUser().getUserId() + 1000)) {
+//				System.out.println(transfer.getTransferId() + "        From: " +
+//						(transfer.getAccountFrom() - 1000) + "         $" + transfer.getAmount());
+//			}
+//		}
 		for (int i = 0; i < transferList.size(); i++) {
-			if (transferList.get(i).getAccountFrom() == (currentUser.getUser().getUserId()+1000)) {
-				int userTo = transferList.get(i).getAccountTo() + 1000;
-				System.out.println(transferList.get(i).getTransferId() + "          To: " +
-						userList.get(userTo).getUserName() + "         $" + transferList.get(i).getAmount());
-			}
-			if (transferList.get(i).getAccountTo() == (currentUser.getUser().getUserId()+1000)) {
-				int userFrom = transferList.get(i).getAccountTo() + 1000;
-				System.out.println(transferList.get(i).getTransferId() + "        From: " +
-						userList.get(userFrom).getUserName() + "         $" + transferList.get(i).getAmount());
-			}
+			System.out.println(transferList.get(i).toString());
 		}
+
 		System.out.println("-----------------------------------");
-		System.out.println("Please enter transfer ID to view details");
+		int input = console.getUserInputInteger("Please enter transfer ID to view details (0 to cancel)");
+		if (input == 0) {
+			return;
+		}
 		
 	}
 
@@ -204,6 +222,9 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	private void collectTransferDetails() {
 
 		int toId = console.getUserInputInteger("Enter ID of user you are sending to (0 to cancel)");
+		if (toId == 0) {
+			return;
+		}
 		BigDecimal transferAmount = console.getUserInputAmount("Enter amount");
 		Integer fromId = currentUser.getUser().getUserId();
 		Transfer newTransfer = new Transfer(2, 2, fromId + 1000, toId + 1000, transferAmount);

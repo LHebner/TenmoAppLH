@@ -24,56 +24,94 @@ public class JdbcTransferDao implements TransferDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    // Create new transfer
     @Override
     public boolean transfer(int transferTypeId, int transferStatusId, int accountFrom, int accountTo, BigDecimal amount) {
-        // create transfer in transfer table
         String sql = "INSERT INTO transfers (transfer_type_id, transfer_status_id, account_from, " +
                 "account_to, amount) " + "VALUES (?, ?, ?, ?, ?) RETURNING transfer_id;";
-        Integer newTransferId;
-        boolean success = false;
         try {
-            newTransferId = jdbcTemplate.queryForObject(sql, Integer.class, transferTypeId, transferStatusId, accountFrom, accountTo, amount);
-        } catch (DataAccessException e) {}
-
-        // get account info for sender
-        sql = "SELECT * FROM accounts WHERE account_id = ?";
-        SqlRowSet rs = jdbcTemplate.queryForRowSet(sql, accountFrom);
-        Account fromAccount = null;
-        if (rs.next()) {
-            fromAccount = jdbcAccountDao.getAccountById(accountFrom);
-        }
-
-        // get account info for recipient
-        sql = "SELECT * FROM accounts WHERE account_id = ?";
-        rs = jdbcTemplate.queryForRowSet(sql, accountTo);
-        Account toAccount = null;
-        if (rs.next()) {
-            toAccount = jdbcAccountDao.getAccountById(accountTo);
-        }
-
-        // amount transaction
-        if (fromAccount.getBalance().compareTo(amount) >= 0) {
-            try {
-                jdbcTemplate.execute("BEGIN TRANSACTION");
-
-                sql = "UPDATE accounts SET balance = (balance - ?) WHERE account_id = ?";
-                jdbcTemplate.update(sql, amount, fromAccount.getAccountId());
-
-                sql = "UPDATE accounts SET balance = (balance + ?) WHERE account_id = ?";
-                jdbcTemplate.update(sql, amount, toAccount.getAccountId());
-
-                jdbcTemplate.execute("COMMIT");
-            } catch (DataAccessException e) {
-                jdbcTemplate.execute("ROLLBACK");
-                return success;
-            }
-        } return success = true;
+            Integer newTransferId = jdbcTemplate.queryForObject(sql, Integer.class, transferTypeId, transferStatusId, accountFrom, accountTo, amount);
+        } catch (DataAccessException e) {
+            return false;
+        } return true;
     }
 
-    public List<Transfer> getTransfers(int accountId) {
+    // Amount transaction
+    @Override
+    public void accountTransfer (Transfer transfer) {
+
+        try {
+            jdbcTemplate.execute("BEGIN TRANSACTION");
+
+            String sql = "UPDATE accounts SET balance = (balance - ?) " +
+                    "WHERE account_id = ?;";
+            jdbcTemplate.update(sql, transfer.getAmount(), transfer.getAccountFrom());
+
+            sql = "UPDATE accounts SET balance = (balance + ?) " +
+                    "WHERE account_id = ?;";
+            jdbcTemplate.update(sql, transfer.getAmount(), transfer.getAccountTo());
+
+            jdbcTemplate.execute("COMMIT");
+        } catch (DataAccessException e) {
+            jdbcTemplate.execute("ROLLBACK");
+        }
+    }
+
+    /**
+     * ORIGINAL METHOD
+     * @param accountId
+     * @return
+     */
+//    @Override
+//    public boolean transfer(int transferTypeId, int transferStatusId, int accountFrom, int accountTo, BigDecimal amount) {
+//        // create transfer in transfer table
+//        String sql = "INSERT INTO transfers (transfer_type_id, transfer_status_id, account_from, " +
+//                "account_to, amount) " + "VALUES (?, ?, ?, ?, ?) RETURNING transfer_id;";
+//        Integer newTransferId;
+//        boolean success = false;
+//        try {
+//            newTransferId = jdbcTemplate.queryForObject(sql, Integer.class, transferTypeId, transferStatusId, accountFrom, accountTo, amount);
+//        } catch (DataAccessException e) {}
+
+//        // get account info for sender
+//        sql = "SELECT * FROM accounts WHERE account_id = ?";
+//        SqlRowSet rs = jdbcTemplate.queryForRowSet(sql, accountFrom);
+//        Account fromAccount = null;
+//        if (rs.next()) {
+//            fromAccount = jdbcAccountDao.getAccountById(accountFrom);
+//        }
+//
+//        // get account info for recipient
+//        sql = "SELECT * FROM accounts WHERE account_id = ?";
+//        rs = jdbcTemplate.queryForRowSet(sql, accountTo);
+//        Account toAccount = null;
+//        if (rs.next()) {
+//            toAccount = jdbcAccountDao.getAccountById(accountTo);
+//        }
+//
+//        // amount transaction
+//        if (fromAccount.getBalance().compareTo(amount) >= 0) {
+//            try {
+//                jdbcTemplate.execute("BEGIN TRANSACTION");
+//
+//                sql = "UPDATE accounts SET balance = (balance - ?) WHERE account_id = ?";
+//                jdbcTemplate.update(sql, amount, fromAccount.getAccountId());
+//
+//                sql = "UPDATE accounts SET balance = (balance + ?) WHERE account_id = ?";
+//                jdbcTemplate.update(sql, amount, toAccount.getAccountId());
+//
+//                jdbcTemplate.execute("COMMIT");
+//            } catch (DataAccessException e) {
+//                jdbcTemplate.execute("ROLLBACK");
+//                return success;
+//            }
+//        } return success = true;
+//    }
+
+    public List<Transfer> getTransfers(Account account) {
         List<Transfer> transfers = new ArrayList<>();
         String sql = "SELECT * FROM transfers WHERE account_from = ? OR account_to = ?;";
-        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, accountId, accountId);
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, account.getAccountId(), account.getAccountId());
         while(results.next()) {
             Transfer transfer = mapRowToTransfer(results);
             transfers.add(transfer);
