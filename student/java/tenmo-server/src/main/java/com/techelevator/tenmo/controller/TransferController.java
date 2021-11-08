@@ -10,9 +10,11 @@ import com.techelevator.tenmo.model.TransferDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+
 import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.security.Principal;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +39,10 @@ public class TransferController {
                 transfer.getAccountTo(), transfer.getAmount());
         transferDao.accountTransfer(transfer);
     }
+
+//    public void transfer(@RequestBody Transfer transfer) {
+//        transferDao.createTransfer(transfer.getTransferTypeId(), transfer.getTransferStatusId(), transfer.getAccountFrom(), transfer.getAccountTo(), transfer.getAmount());
+//    }
 
     @RequestMapping(path = "/all", method = RequestMethod.GET)
     public List<Transfer> getTransfers(@RequestBody Account account) {

@@ -1,12 +1,9 @@
 package com.techelevator.tenmo.services;
 
-import com.techelevator.tenmo.model.Account;
 import com.techelevator.tenmo.model.AuthenticatedUser;
 import com.techelevator.tenmo.model.Transfer;
-import com.techelevator.tenmo.model.User;
+import com.techelevator.tenmo.model.UserCredentials;
 import org.springframework.http.*;
-import org.springframework.web.client.ResourceAccessException;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 
@@ -30,6 +27,7 @@ public class TransferService {
         return headers;
     }
 
+<<<<<<< HEAD
 //    public Transfer transfer(Transfer transfer) {
 //        HttpEntity<Transfer> entity = makeTransferEntity(transfer);
 //        Transfer newTransfer = null;
@@ -71,10 +69,22 @@ public class TransferService {
     /**
      * ORIGINAL END
      */
+=======
+    public Transfer transfer(Transfer transfer) {
+        HttpEntity<?> entity = makeTransferEntity(transfer);
+        ResponseEntity<Transfer> newTransfer = null;
+        try {
+            newTransfer = restTemplate.exchange(API_BASE_URL + "transfer/",
+                    HttpMethod.POST, entity, Transfer.class);
+        } catch (RestClientResponseException e) {}
+
+        return newTransfer.getBody();
+    }
+>>>>>>> 0037c7235fa70d12af53f5f9fcb6c864cbeaa1d6
 
     public List<Transfer> getTransferList(String authToken) {
         HttpEntity<?> entity = new HttpEntity<>(headers(authToken));
-        ResponseEntity <Transfer[]> transferList = restTemplate.exchange(API_BASE_URL + "transfer/all",
+        ResponseEntity<Transfer[]> transferList = restTemplate.exchange(API_BASE_URL + "transfer/all",
                 HttpMethod.GET, entity, Transfer[].class);
         return Arrays.asList(transferList.getBody());
     }
